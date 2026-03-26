@@ -1,9 +1,10 @@
 const express = require('express')
 const SignUP_route = express.Router()
 
-const Controller = require('../controllers/Login_controller')
+const Controller = require('../controllers/SignUP_controller')
+const validator = require('../middlewares/signUP_validator')
 
-SignUP_route.get('/', Controller.SignUP_Get)
-SignUP_route.post('/', Controller.SignUP_post)
 
-exports.module = SignUP_route;
+SignUP_route.post('/', validator.signup_validation , Controller.SignUP_post)
+
+module.exports = SignUP_route;

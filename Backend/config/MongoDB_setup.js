@@ -8,4 +8,4 @@ async function database(){
 }
 
 
-exports.module = database();
+module.exports = database;

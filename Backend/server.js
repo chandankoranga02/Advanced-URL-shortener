@@ -8,6 +8,7 @@ const SignUp_route = require('./routes/SignUP_route')
 
 
 const app =  express()
+app.use(express.json());
 
 
 app.use('/login', Login_route)
@@ -16,4 +17,5 @@ app.use('/signup', SignUp_route)
 
 
 const PORT = 5000;
-app.listen(PORT , database, console.log("server is running at PORT 5000"))
+database();
+app.listen(PORT , ()=> { console.log("server is running at PORT 5000")})
