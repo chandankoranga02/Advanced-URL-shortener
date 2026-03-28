@@ -1,7 +1,7 @@
 const bcrypt = require('bcrypt')
 const login_logs = require('../models/Login_data')
 const Login = require('../models/FormData')
-
+const jwt = require("jsonwebtoken");
 
 exports.Login_post = async (req,res) => {
    const { email , password } =  req.body;
@@ -34,7 +34,11 @@ exports.Login_post = async (req,res) => {
 
        await successfully_logedIn.save()
 
-
-        return res.status(200).json({msg  : "Login successful "})
+       const token = jwt.sign({id : Login_email._id} , process.env.JWT_SECRET_KEY , { expiresIn: "30d" })
+      
+      return res.status(200).json({msg  : "Login successful " , token : token})
       }  
+
+    
+
 }
