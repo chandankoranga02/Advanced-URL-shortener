@@ -1,10 +1,12 @@
 // npm external Module
 const express = require('express')
+require("dotenv").config();
 
 // local module
 const database = require('./config/MongoDB_setup')
 const Login_route = require('./routes/Login_route')
 const SignUp_route = require('./routes/SignUP_route')
+const JWT_login = require('./routes/Auth/JWT_login')
 
 
 const app =  express()
@@ -13,6 +15,7 @@ app.use(express.json());
 
 app.use('/login', Login_route)
 app.use('/signup', SignUp_route)
+app.use('/home/dahsboard', JWT_login)
 
 
 

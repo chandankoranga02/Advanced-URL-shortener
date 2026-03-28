@@ -7,7 +7,7 @@ exports.Login_post = async (req,res) => {
    const { email , password } =  req.body;
    const Login_email =  await Login.findOne({email : email})
 
-   if(!Login_email){ return res.status(400).send({msg : " Invalid Credentials , please Enter correct email and password"})}
+   if(!Login_email){ return res.status(400).json({msg : " Invalid Credentials , please Enter correct email and password"})}
 
    const matched = await bcrypt.compare(password, Login_email.password)
 
@@ -20,11 +20,11 @@ exports.Login_post = async (req,res) => {
        }) 
 
        await  Failed_to_logedIn.save()
-       return res.status(400).send({msg  : "Login failed , Invalid credentials "})
+       return res.status(400).json({msg  : "Login failed , Invalid credentials "})
    }
 
-   if(Login_email || matched){
-      
+
+     else {
        const successfully_logedIn  =  new login_logs({
          LogedInBy: Login_email._id,
          IpAddress : req.headers['x-forwarded-for'] || req.socket.remoteAddress,
@@ -34,7 +34,7 @@ exports.Login_post = async (req,res) => {
 
        await successfully_logedIn.save()
 
-       
-        return res.status(201).send({msg  : "Login failed , Invalid credentials "})
-   }
+
+        return res.status(200).json({msg  : "Login successful "})
+      }  
 }

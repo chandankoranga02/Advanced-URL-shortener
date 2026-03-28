@@ -12,7 +12,8 @@ exports.signup_validation = [
     .trim()
     .isEmail()
     .withMessage('Enter a valid Email')
-    .notEmpty(),
+    .notEmpty()
+    .withMessage('Enter a Email'),
 
     check('password')
     .trim()
