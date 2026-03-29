@@ -4,6 +4,6 @@ const Login_JWT = express.Router()
 const controller = require('../../controllers/Auth/dashboard')
 
 
-Login_JWT.get('/:id', verifyToken, controller.dashboard )
+Login_JWT.get('/user/:id', verifyToken, controller.dashboard )
 
 module.exports = Login_JWT;
