@@ -3,33 +3,63 @@ import { useState } from 'react';
 
 
 export default function HP_hero() {
- 
- 
-   const [urlState, setURLstate] = useState("");
-   const [Password, setPassword]= useState("");
-   const [shortURL, SetshortURL] = useState("");
- 
-   const Shortener_handler = () =>{
-       
-   }
 
-   const Copy_handler = async ()=>{
-    const copyURL  = shortURL;
+
+  const [urlState, setURLstate] = useState("");
+  const [Password, setPassword] = useState("");
+  const [shortURL, SetshortURL] = useState("");
+  const [expiry, setExpiry] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
+
+  const Shortener_handler = async () => {
+
+    if (!urlState) {
+      return setError("URL is required");
+    }
+
+    setError("")
+    setLoading(true);
+
+
+    const response = await fetch("http://localhost:5000/api/shortern",
+      { method: "POST", headers: {"Content-Type" : "application/json"},
+      body : JSON.stringify({
+        originalURL: urlState,
+        Password: Password,
+        expiry: expiry
+      }),
+  });
+
+    const data = await response.json();
+
+    if(!response.ok){
+        throw new Error(data.message || "Failed");
+    }
+
+    SetshortURL(data.shortURL);
+    setLoading(false)
+
+
+  };
+
+  const Copy_handler = async () => {
+    const copyURL = shortURL;
     await navigator.clipboard.writeText(copyURL);
     alert("Copied to clipboard!");
-   }
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
+  }
+
+
+
+
+
+
+
+
+
+
+
+
   return (
     <div className="min-h-screen bg-zinc-950 text-zinc-100 flex flex-col items-center justify-center px-4">
 
@@ -59,7 +89,7 @@ export default function HP_hero() {
               className="flex-1 bg-zinc-800 border border-zinc-700 rounded-xl px-5 py-4 text-base outline-none focus:border-blue-500 transition"
             />
 
-            <button className="bg-blue-600 hover:bg-blue-500 text-white font-semibold px-8 py-4 rounded-xl transition">
+            <button  onClick={Shortener_handler} className="bg-blue-600 hover:bg-blue-500 text-white font-semibold px-8 py-4 rounded-xl transition">
               Shorten
             </button>
           </div>
@@ -88,6 +118,7 @@ export default function HP_hero() {
               </label>
               <input
                 type="date"
+                 value={expiry}
                 className="w-full bg-zinc-800 border border-zinc-700 rounded-lg px-4 py-3 outline-none focus:border-blue-500"
               />
             </div>
