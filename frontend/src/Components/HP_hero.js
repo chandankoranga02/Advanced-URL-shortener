@@ -1,6 +1,35 @@
-import React from 'react'
+import React, { use } from 'react'
+import { useState } from 'react';
+
 
 export default function HP_hero() {
+ 
+ 
+   const [urlState, setURLstate] = useState("");
+   const [Password, setPassword]= useState("");
+   const [shortURL, SetshortURL] = useState("");
+ 
+   const Shortener_handler = () =>{
+       
+   }
+
+   const Copy_handler = async ()=>{
+    const copyURL  = shortURL;
+    await navigator.clipboard.writeText(copyURL);
+    alert("Copied to clipboard!");
+   }
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
   return (
     <div className="min-h-screen bg-zinc-950 text-zinc-100 flex flex-col items-center justify-center px-4">
 
@@ -24,7 +53,9 @@ export default function HP_hero() {
           <div className="flex flex-col md:flex-row gap-4 mb-8">
             <input
               type="text"
-              placeholder="Paste your long URL here..."
+              placeholder='Enter your url here'
+              value={urlState}
+              onChange={(event) => setURLstate(event.target.value)}
               className="flex-1 bg-zinc-800 border border-zinc-700 rounded-xl px-5 py-4 text-base outline-none focus:border-blue-500 transition"
             />
 
@@ -44,6 +75,8 @@ export default function HP_hero() {
               <input
                 type="text"
                 placeholder="Optional"
+                onChange={(event) => setPassword(event.target.value)}
+                value={Password}
                 className="w-full bg-zinc-800 border border-zinc-700 rounded-lg px-4 py-3 outline-none focus:border-blue-500"
               />
             </div>
@@ -84,11 +117,12 @@ export default function HP_hero() {
             <input
               type="text"
               placeholder="https://short.ly/abc23"
+              value={shortURL}
               readOnly
               className="flex-1 bg-zinc-800 border border-zinc-700 rounded-lg px-4 py-3"
             />
 
-            <button className="bg-blue-600 hover:bg-blue-500 px-5 py-3 rounded-lg transition">
+            <button onClick={Copy_handler} className="bg-blue-600 hover:bg-blue-500 px-5 py-3 rounded-lg transition">
               Copy
             </button>
           </div>
