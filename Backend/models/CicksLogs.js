@@ -2,12 +2,18 @@ const mongoose = require('mongoose')
 
 const clickLogsSchema = new mongoose.Schema({
 
-  linkId: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: "LinksData",
+    randomID  : {
+    type: String,
     required: true,
     index: true
   },
+
+  clicks: {
+    type: Number,
+    required: true,
+    default: 0
+  },
+
 
   ipAddress: String,
 

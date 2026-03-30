@@ -28,11 +28,6 @@ const LinksDataSchema = new mongoose.Schema({
         type: Date
     },
 
-    clicks: {
-        type: Number,
-        required: true,
-        default: 0
-    },
 
     status: {
         type: String,
