@@ -4,7 +4,7 @@ exports.signup_validation = [
     check('fullName')
     .trim()
     .isLength({min : 2})
-    .withMessage("Enter minimum length of 5")
+    .withMessage("Enter minimum length of 2")
     .matches(/^[A-Za-z\s]+$/)
     .withMessage("only alphabets and Space only"),
 

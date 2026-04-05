@@ -1,5 +1,6 @@
 // npm external Module
 const express = require('express')
+const cors = require("cors");
 require("dotenv").config();
 
 // local module
@@ -12,6 +13,7 @@ const Redirect_route = require('./routes/redirect_window')
 
 const app =  express()
 app.use(express.json());
+app.use(cors());
 
 
 app.use('/login', Login_route)
@@ -19,7 +21,6 @@ app.use('/signup', SignUp_route)
 app.use('/home/dahsboard', JWT_login)
 app.use('/api/shortern/', API_shortner)
 app.use('/', Redirect_route)
-
 
 
 const PORT = 5000;
