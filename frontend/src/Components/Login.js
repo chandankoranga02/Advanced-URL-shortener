@@ -1,10 +1,82 @@
 import React from 'react'
+import { useState } from 'react'
+import { useNavigate } from "react-router-dom";
 
 export default function Login() {
+  const navigate = useNavigate();
+  const [error, seterror] = useState("");
+  const [success, setsuccess] = useState("");
+
+  const [Logindata, setLogindata] = useState({
+    email: "",
+    password: ""
+  })
+
+  const onChaneHandler = (e) => {
+    setLogindata({
+      ...Logindata, [e.target.name]: e.target.value
+    })
+  }
+
+  const API_key = "http://localhost:5000/login";
+
+  const SubmitHandler = async (e) => {
+    e.preventDefault()
+     seterror("")
+
+    const response = await fetch(API_key, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify(Logindata)
+    })
+
+    const data = await response.json()
+
+    if(!response.ok){
+      seterror(data.msg)
+    }
+    else{
+      setsuccess(data.msg)
+      
+      setTimeout (()=> {
+        navigate("/home");
+      }, 2000)
+
+    }
+
+  }
+
+
   return (
 
-    <d
-      iv className="min-h-screen bg-zinc-950 text-zinc-100 flex items-center justify-center">
+    <div className="min-h-screen bg-zinc-950 text-zinc-100 flex items-center justify-center">
+
+      {error && (
+        <div style={{
+          backgroundColor: "#fee2e2",
+          color: "#b91c1c",
+          padding: "10px",
+          marginBottom: "10px",
+          borderRadius: "5px"
+        }}>
+          {error}
+        </div>
+      )}
+
+      {success && (
+        <div style={{
+          backgroundColor: "#dcfce7",
+          color: "#166534",
+          padding: "10px",
+          marginBottom: "10px",
+          borderRadius: "5px"
+        }}>
+          {success}
+        </div>
+      )}
+
 
       {/* Container */}
       <div className="w-full max-w-md bg-zinc-900 border border-zinc-800 rounded-2xl p-8 shadow-lg">
@@ -15,7 +87,7 @@ export default function Login() {
         </h1>
 
         {/* Form */}
-        <form action="/home" method='POST' className="flex flex-col gap-4">
+        <form onSubmit={SubmitHandler} className="flex flex-col gap-4">
 
           {/* Email */}
           <div>
@@ -25,6 +97,7 @@ export default function Login() {
             <input
               type="email"
               placeholder="you@example.com"
+              onChange={onChaneHandler}
               name='email'
               className="w-full bg-zinc-800 border border-zinc-700 rounded-lg px-3 py-2 text-sm outline-none focus:border-emerald-500 transition"
             />
@@ -38,6 +111,7 @@ export default function Login() {
             <input
               type="password"
               placeholder="••••••••"
+              onChange={onChaneHandler}
               name='password'
               className="w-full bg-zinc-800 border border-zinc-700 rounded-lg px-3 py-2 text-sm outline-none focus:border-emerald-500 transition"
             />
@@ -82,6 +156,6 @@ export default function Login() {
         </p>
 
       </div>
-    </d>
+    </div>
   );
 }

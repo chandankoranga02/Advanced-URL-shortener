@@ -1,12 +1,85 @@
 import React from 'react'
 import { useNavigate } from "react-router-dom";
+import { useState } from 'react';
 
 
 export default function SignUp() {
   const navigate = useNavigate();
+  const [error, setError] = useState("");
+  const [success, setsuccess] = useState("");
+  const [formData, SetformData] = useState({
+    fullName: "",
+    email: "",
+    password: "",
+    Confirmpassword: ""
+
+  })
+
+  const onchangeHandler = (e) => {
+    SetformData({
+      ...formData,
+      [e.target.name]: e.target.value
+    })
+  }
+
+
+  const API_sighnup = "http://localhost:5000/signup";
+
+  const submitHandler = async (e) => {
+    e.preventDefault();
+    setError("");
+    const response = await fetch(API_sighnup, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify(formData)
+    })
+
+
+    const data = await response.json();
+
+    if (!response.ok) {
+      setError(data.msg);
+    } else {
+      setsuccess(data.msg);
+      setTimeout(() => {
+        navigate("/login");
+      }, 2000);
+    }
+
+  }
+
+
+
+
   return (
     <div className="min-h-screen bg-zinc-950 text-zinc-100 flex items-center justify-center">
-      
+
+      {error && (
+        <div style={{
+          backgroundColor: "#fee2e2",
+          color: "#b91c1c",
+          padding: "10px",
+          marginBottom: "10px",
+          borderRadius: "5px"
+        }}>
+          {error}
+        </div>
+      )}
+
+      {success && (
+        <div style={{
+          backgroundColor: "#dcfce7",
+          color: "#166534",
+          padding: "10px",
+          marginBottom: "10px",
+          borderRadius: "5px"
+        }}>
+          {success}
+        </div>
+      )}
+
       {/* Container */}
       <div className="w-full max-w-md bg-zinc-900 border border-zinc-800 rounded-2xl p-8 shadow-lg">
 
@@ -16,7 +89,7 @@ export default function SignUp() {
         </h1>
 
         {/* Form */}
-        <form action="/login" method="POST" className="flex flex-col gap-4">
+        <form onSubmit={submitHandler} className="flex flex-col gap-4">
 
           {/* Username */}
           <div>
@@ -26,6 +99,7 @@ export default function SignUp() {
             <input
               type="text"
               name="fullName"
+              onChange={onchangeHandler}
               placeholder="Chadan singh kornga"
               className="w-full bg-zinc-800 border border-zinc-700 rounded-lg px-3 py-2 text-sm outline-none focus:border-emerald-500 transition"
             />
@@ -39,6 +113,7 @@ export default function SignUp() {
             <input
               type="email"
               name="email"
+              onChange={onchangeHandler}
               placeholder="you@example.com"
               className="w-full bg-zinc-800 border border-zinc-700 rounded-lg px-3 py-2 text-sm outline-none focus:border-emerald-500 transition"
             />
@@ -52,6 +127,7 @@ export default function SignUp() {
             <input
               type="password"
               name="password"
+              onChange={onchangeHandler}
               placeholder="••••••••"
               className="w-full bg-zinc-800 border border-zinc-700 rounded-lg px-3 py-2 text-sm outline-none focus:border-emerald-500 transition"
             />
@@ -65,6 +141,7 @@ export default function SignUp() {
             <input
               type="password"
               placeholder="••••••••"
+              onChange={onchangeHandler}
               name="Confirmpassword"
               className="w-full bg-zinc-800 border border-zinc-700 rounded-lg px-3 py-2 text-sm outline-none focus:border-emerald-500 transition"
             />
@@ -90,7 +167,7 @@ export default function SignUp() {
         {/* Login Redirect */}
         <p className="text-center text-sm text-zinc-400">
           Already have an account?{" "}
-          <button onClick={()=>{  navigate("/login") }} className="text-emerald-400 hover:text-emerald-300">
+          <button onClick={() => { navigate("/login") }} className="text-emerald-400 hover:text-emerald-300">
             Login
           </button>
         </p>
