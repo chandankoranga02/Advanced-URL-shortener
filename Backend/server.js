@@ -10,15 +10,16 @@ const SignUp_route = require('./routes/SignUP_route')
 const JWT_login = require('./routes/Auth/JWT_login')
 const API_shortner =  require('./routes/response')
 const Redirect_route = require('./routes/redirect_window')
+const Home_route = require('./routes/Auth/Home_route')
 
 const app =  express()
 app.use(express.json());
-app.use(cors());
+app.use(cors({ origin : "http://localhost:3000", credentials : true }));
 
 
 app.use('/login', Login_route)
 app.use('/signup', SignUp_route)
-app.use('/home/dahsboard', JWT_login)
+app.use('/home/dahsboard/', JWT_login)
 app.use('/api/shortern/', API_shortner)
 app.use('/', Redirect_route)
 
