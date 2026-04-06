@@ -49,14 +49,7 @@ export default function HP_hero() {
     alert("Copied to clipboard!");
   }
 
-
-
-
-
-
-
-
-
+      
 
 
 
