@@ -1,4 +1,7 @@
 const jwt = require('jsonwebtoken')
+const FormData = require('../models/FormData');
+
+
 
 exports.verifyToken = async (req, res, next) => {
     const Token = req.cookies.token;
@@ -7,16 +10,15 @@ exports.verifyToken = async (req, res, next) => {
         return res.status(401).json({ msg: "User not logged in" })
     }
 
-    const token = HeaderToken.split(" ")[1];
-    const decoded = jwt.verify(token, process.env.JWT_SECRET_KEY);
-    const user = await FormData.findById(decoded._id).select("fullName email");
+    const decoded = jwt.verify(Token, process.env.JWT_SECRET_KEY);
+    const user = await FormData.findById(decoded.id).select("fullName email");
 
 
-    res.json({
-        fullName: user.fullName,
-        email: user.email
-    });
+    if (!user) {
+        return res.status(401).json({ msg: "User not found" });
+    }
 
-    req.user = decoded;
+
+    req.user = user;
     next();
 }

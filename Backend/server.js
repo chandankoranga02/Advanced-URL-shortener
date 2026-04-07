@@ -10,7 +10,7 @@ const SignUp_route = require('./routes/SignUP_route')
 const JWT_login = require('./routes/Auth/JWT_login')
 const API_shortner =  require('./routes/response')
 const Redirect_route = require('./routes/redirect_window')
-const Home_route = require('./routes/Auth/Home_route')
+const Logged_user = require('./routes/Auth/User_route')
 
 const app =  express()
 app.use(express.json());
@@ -22,7 +22,7 @@ app.use('/signup', SignUp_route)
 app.use('/home/dahsboard/', JWT_login)
 app.use('/api/shortern/', API_shortner)
 app.use('/', Redirect_route)
-
+app.use('/api/', Logged_user)
 
 const PORT = 5000;
 database();

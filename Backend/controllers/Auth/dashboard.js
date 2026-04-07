@@ -1,3 +1,3 @@
-exports.dashboard = (req,res)=>{
-    
+exports.dashboard = (req, res) => {
+            
 }
