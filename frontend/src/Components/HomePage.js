@@ -6,11 +6,13 @@ import { useNavigate } from "react-router-dom";
 
 
 export default function HomePage() {
- const [isAuth, setIsAuth] = useState(null);
-  const navigate = useNavigate();
+const [user, setUser] = useState(null)
+const navigate = useNavigate();
 
+
+ let isloggedIN = false;
   useEffect(() => {
-
+    
     const authCheck = async () => {
       const response = await fetch("http://localhost:5000/api/me", {
         credentials: "include"
@@ -18,27 +20,25 @@ export default function HomePage() {
 
       if (!response.ok) {
         navigate("/login");
-        setIsAuth(false);
+        return;
       }
 
-      else {
-        setIsAuth(true);
-      }
-
+      const data = await response.json();
+      setUser(data);
+      isloggedIN = true;
     }
 
     authCheck();
 
-
   }, []);
 
 
-    if (isAuth === null) return null;
+    if (!user) return null;
 
   return (
     <>
 
-      <HP_nav />
+      <HP_nav user={user} status_log={isloggedIN} />
       <HP_hero />
       {/* <Password_redirect/> */}
 
