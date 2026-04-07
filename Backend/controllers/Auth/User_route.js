@@ -5,3 +5,7 @@ exports.get_logges_user = (req, res) => {
         userId: req.user._id
     });
 }
+
+exports.post_loggout_user = (req, res)=>{
+     
+}

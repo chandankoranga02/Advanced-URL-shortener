@@ -2,6 +2,9 @@
 const express = require('express')
 const cors = require("cors");
 require("dotenv").config();
+const cookieParser = require("cookie-parser");
+
+
 
 // local module
 const database = require('./config/MongoDB_setup')
@@ -15,7 +18,7 @@ const Logged_user = require('./routes/Auth/User_route')
 const app =  express()
 app.use(express.json());
 app.use(cors({ origin : "http://localhost:3000", credentials : true }));
-
+app.use(cookieParser());
 
 app.use('/login', Login_route)
 app.use('/signup', SignUp_route)

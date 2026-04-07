@@ -11,13 +11,12 @@ exports.verifyToken = async (req, res, next) => {
     }
 
     const decoded = jwt.verify(Token, process.env.JWT_SECRET_KEY);
-    const user = await FormData.findById(decoded.id).select("fullName email");
+    const user = await FormData.findById(decoded.id).select("fullName email _id");
 
 
     if (!user) {
         return res.status(401).json({ msg: "User not found" });
     }
-
 
     req.user = user;
     next();
