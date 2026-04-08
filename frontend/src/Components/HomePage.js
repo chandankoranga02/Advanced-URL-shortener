@@ -7,6 +7,7 @@ import { useNavigate } from "react-router-dom";
 
 export default function HomePage() {
 const [user, setUser] = useState(null)
+const [isLoggedIn, setIsLoggedIn] = useState(false);
 const navigate = useNavigate();
 
 
@@ -20,12 +21,13 @@ const navigate = useNavigate();
 
       if (!response.ok) {
         navigate("/login");
-        return;
+        setIsLoggedIn(false)
+        return;   
       }
 
       const data = await response.json();
       setUser(data);
-      isloggedIN = true;
+      setIsLoggedIn(true);
     }
 
     authCheck();
@@ -38,9 +40,10 @@ const navigate = useNavigate();
   return (
     <>
 
-      <HP_nav user={user} status_log={isloggedIN} />
+      <HP_nav user={user} status={isLoggedIn} />
+      
       <HP_hero />
-      {/* <Password_redirect/> */}
+      
 
     </>
   )

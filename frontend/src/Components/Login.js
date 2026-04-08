@@ -33,8 +33,10 @@ export default function Login() {
       body: JSON.stringify(Logindata)
     })
 
+
     const data = await response.json()
 
+    
     if(!response.ok){
       seterror(data.msg)
     }
