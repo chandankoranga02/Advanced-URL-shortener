@@ -5,7 +5,7 @@ const controller = require('../../controllers/Auth/User_route')
 
 
 User_logged.get('/me', verifyToken, controller.get_logges_user )
-User_logged.post('/me/logout', verifyToken, controller.post_loggout_user )
+User_logged.post('/logout', controller.post_loggout_user )
 
 
 module.exports = User_logged;

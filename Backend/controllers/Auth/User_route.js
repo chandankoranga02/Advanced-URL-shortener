@@ -6,6 +6,12 @@ exports.get_logges_user = (req, res) => {
     });
 }
 
-exports.post_loggout_user = (req, res)=>{
-     
+exports.post_loggout_user = (req, res) => {
+    res.clearCookie("token", {
+        httpOnly: true,
+        secure: false, // production me true
+        sameSite: "lax"
+    });
+
+    return res.status(200).json({ msg: "Logged out successfully" });
 }
