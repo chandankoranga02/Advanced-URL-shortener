@@ -26,7 +26,7 @@ exports.Response_POST_API = async (req, res) => {
     }
 
     const hashedPassword = Password ?  await bcrypt.hash(Password, 10) : null;
-  //   const userId = "67f123abc456def789"; temporary user id for testing 
+  //   const userId = "67f123abc456def789"; temporary user id fro te
 
 
 
