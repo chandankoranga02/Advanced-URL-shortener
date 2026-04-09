@@ -8,14 +8,17 @@ import { Routes, Route } from "react-router-dom";
 import Redirect_error from './Components/Redirect_error'
 import Password_redirect from './Components/Password_redirect'
 
+
 function App() {
+  
   return (
     <>
     
 
     <Routes>
 
-     <Route path="/home" element={<HomePage/>}/>
+  
+     <Route path="/" element={<HomePage/>}/>
      <Route path="/login" element={<Login/>}/>
      <Route path="/signup" element={<SignUp/>}/>
      <Route path="*" element={<Error_404/>}/>

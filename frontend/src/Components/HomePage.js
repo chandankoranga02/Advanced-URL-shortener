@@ -6,14 +6,14 @@ import { useNavigate } from "react-router-dom";
 
 
 export default function HomePage() {
-const [user, setUser] = useState(null)
-const [isLoggedIn, setIsLoggedIn] = useState(false);
-const navigate = useNavigate();
+  const [user, setUser] = useState(null)
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const navigate = useNavigate();
 
 
- let isloggedIN = false;
+  let isloggedIN = false;
   useEffect(() => {
-    
+
     const authCheck = async () => {
       const response = await fetch("http://localhost:5000/api/me", {
         credentials: "include"
@@ -22,7 +22,7 @@ const navigate = useNavigate();
       if (!response.ok) {
         navigate("/login");
         setIsLoggedIn(false)
-        return;   
+        return;
       }
 
       const data = await response.json();
@@ -35,15 +35,14 @@ const navigate = useNavigate();
   }, []);
 
 
-    if (!user) return null;
+  if (!user) return null;
 
   return (
     <>
 
-      <HP_nav user={user} status={isLoggedIn} />
-      
-      <HP_hero />
-      
+      <HP_nav  status={isLoggedIn} />
+      <HP_hero User_name={user}  status={isLoggedIn} />
+
 
     </>
   )

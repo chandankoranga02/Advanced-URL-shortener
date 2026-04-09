@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 
 
-export default function HP_nav({ user, status }) {
+export default function HP_nav({ status }) {
 
   const navigate = useNavigate();
   const [msg , setmsg] = useState("")
@@ -21,7 +21,7 @@ export default function HP_nav({ user, status }) {
     navigate("/login")
   }
 
-  const FirstName = user.fullName.split(" ")[0]
+
 
   return (
     <>
@@ -31,11 +31,7 @@ export default function HP_nav({ user, status }) {
           <h1 className="font-mono text-lg font-bold text-white tracking-tight">
             Dev<span className="text-emerald-400">Utils</span>
           </h1>
-          {status ? (
-            <h1 className="font-mono text-lg font-bold text-white tracking-tight">
-              <span className="text-emerald-400">{FirstName}</span>
-            </h1>
-          ) : (null)}
+
 
 
           <div className="flex items-center gap-8">

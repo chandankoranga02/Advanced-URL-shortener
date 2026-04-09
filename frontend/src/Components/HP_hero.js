@@ -2,7 +2,7 @@ import React, { use } from 'react'
 import { useState } from 'react';
 
 
-export default function HP_hero() {
+export default function HP_hero({User_name , status}) {
 
 
   const [urlState, setURLstate] = useState("");
@@ -23,21 +23,24 @@ export default function HP_hero() {
 
 
     const response = await fetch("http://localhost:5000/api/shortern",
-      { method: "POST", headers: {"Content-Type" : "application/json"},
-      body : JSON.stringify({
-        originalURL: urlState,
-        Password: Password,
-        expiry: expiry
-      }),
-  });
+      {
+        method: "POST", headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          originalURL: urlState,
+          Password: Password,
+          expiryDate: expiry
+        }),
+      });
+
+
 
     const data = await response.json();
 
-    if(!response.ok){
-        throw new Error(data.message || "Failed");
+    if (!response.ok) {
+      throw new Error(data.message || "Failed");
     }
 
-    SetshortURL(data.shortURL);
+    SetshortURL(data.ShortURL);
     setLoading(false)
 
 
@@ -49,19 +52,26 @@ export default function HP_hero() {
     alert("Copied to clipboard!");
   }
 
-      
-
-
+let FirstName = User_name.fullName.trim().split(" ")[0];
+FirstName = FirstName.charAt(0).toUpperCase() + FirstName.slice(1).toLowerCase();
 
   return (
     <div className="min-h-screen bg-zinc-950 text-zinc-100 flex flex-col items-center justify-center px-4">
 
       {/* Content Wrapper */}
-      <div className="w-full max-w-5xl flex flex-col justify-center">
+      <div className="w-full max-w-5xl flex flex-col gap-10 justify-center">
 
         {/* Heading */}
         <div className="text-center mb-12">
-          <h1 className="text-5xl md:text-6xl font-semibold mb-4">
+
+
+        {status ? (<h1 className="text-5xl md:text-6xl font-semibold mb-5">
+            Hi , <span className="text-blue-500">{FirstName}</span>
+          </h1>) : (null)}
+
+
+
+          <h1 className="text-5xl text-yellow-500 md:text-6xl font-semibold mb-4">
             Shorten Your Links
           </h1>
           <p className="text-zinc-400 text-base">
@@ -82,7 +92,7 @@ export default function HP_hero() {
               className="flex-1 bg-zinc-800 border border-zinc-700 rounded-xl px-5 py-4 text-base outline-none focus:border-blue-500 transition"
             />
 
-            <button  onClick={Shortener_handler} className="bg-blue-600 hover:bg-blue-500 text-white font-semibold px-8 py-4 rounded-xl transition">
+            <button onClick={Shortener_handler} className="bg-blue-600 hover:bg-blue-500 text-white font-semibold px-8 py-4 rounded-xl transition">
               Shorten
             </button>
           </div>
@@ -111,7 +121,8 @@ export default function HP_hero() {
               </label>
               <input
                 type="date"
-                 value={expiry}
+                value={expiry}
+                onChange={(event) => setExpiry(event.target.value)}
                 className="w-full bg-zinc-800 border border-zinc-700 rounded-lg px-4 py-3 outline-none focus:border-blue-500"
               />
             </div>

@@ -6,6 +6,7 @@ export default function Login() {
   const navigate = useNavigate();
   const [error, seterror] = useState("");
   const [success, setsuccess] = useState("");
+  
 
   const [Logindata, setLogindata] = useState({
     email: "",
@@ -33,10 +34,9 @@ export default function Login() {
       body: JSON.stringify(Logindata)
     })
 
-
     const data = await response.json()
 
-    
+
     if(!response.ok){
       seterror(data.msg)
     }
@@ -44,7 +44,7 @@ export default function Login() {
       setsuccess(data.msg)
       
       setTimeout (()=> {
-        navigate("/home");
+        navigate("/");
       }, 2000)
 
     }
