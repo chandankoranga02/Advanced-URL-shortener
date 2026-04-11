@@ -8,12 +8,11 @@ exports.verified_password = async (req, res) => {
     const { password } = req.body;
     const { shortcode } = req.params;
 
-    console.log(password)
-    console.log(shortcode)
+
 
     const link = await Links_data.findOne({ randomId: shortcode });
     if (!link) {
-        return res.status(404).send("Link not found");
+        return res.status(404).json({ msg: "Link not found" });
     }
 
 
@@ -29,12 +28,15 @@ exports.verified_password = async (req, res) => {
         });
 
 
-        res.redirect(link.originalLink)
+        res.status(200).json({
+            success: true,
+            redirectUrl: link.originalLink
+    })
         return;
     }
 
     else {
-        res.status(404).json({ msg: "Password don not match , TRY again " })
+        res.status(404).json({ msg: "Password dont not match , TRY again " })
 
     }
 
