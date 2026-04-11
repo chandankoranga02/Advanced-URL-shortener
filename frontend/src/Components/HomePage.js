@@ -20,9 +20,9 @@ export default function HomePage() {
       })
 
       if (!response.ok) {
-        navigate("/login");
         setIsLoggedIn(false)
         return;
+        
       }
 
       const data = await response.json();
@@ -35,7 +35,6 @@ export default function HomePage() {
   }, []);
 
 
-  if (!user) return null;
 
   return (
     <>

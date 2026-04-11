@@ -2,17 +2,17 @@ import React from 'react'
 import { useNavigate } from "react-router-dom";
 import { useState } from 'react';
 
-
 export default function SignUp() {
   const navigate = useNavigate();
   const [error, setError] = useState("");
   const [success, setsuccess] = useState("");
+  const [loading, setLoading] = useState(false); // ✅ added
+
   const [formData, SetformData] = useState({
     fullName: "",
     email: "",
     password: "",
     Confirmpassword: ""
-
   })
 
   const onchangeHandler = (e) => {
@@ -22,12 +22,13 @@ export default function SignUp() {
     })
   }
 
-
   const API_sighnup = "http://localhost:5000/signup";
 
   const submitHandler = async (e) => {
     e.preventDefault();
     setError("");
+    setLoading(true); // ✅ start loading
+
     const response = await fetch(API_sighnup, {
       method: "POST",
       headers: {
@@ -36,47 +37,29 @@ export default function SignUp() {
       body: JSON.stringify(formData)
     })
 
-
     const data = await response.json();
 
     if (!response.ok) {
       setError(data.msg);
+      setLoading(false); // ✅ stop loading
     } else {
       setsuccess(data.msg);
       setTimeout(() => {
         navigate("/login");
       }, 2000);
     }
-
   }
-
-
-
 
   return (
     <div className="min-h-screen bg-zinc-950 text-zinc-100 flex items-center justify-center">
 
-      {error && (
-        <div style={{
-          backgroundColor: "#fee2e2",
-          color: "#b91c1c",
-          padding: "10px",
-          marginBottom: "10px",
-          borderRadius: "5px"
-        }}>
-          {error}
-        </div>
-      )}
-
-      {success && (
-        <div style={{
-          backgroundColor: "#dcfce7",
-          color: "#166534",
-          padding: "10px",
-          marginBottom: "10px",
-          borderRadius: "5px"
-        }}>
-          {success}
+      {/* 🔥 LOADING OVERLAY */}
+      {loading && (
+        <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50">
+          <div className="flex flex-col items-center gap-4">
+            <div className="w-12 h-12 border-4 border-emerald-500 border-t-transparent rounded-full animate-spin"></div>
+            <p className="text-white text-sm">Creating account...</p>
+          </div>
         </div>
       )}
 
@@ -88,10 +71,22 @@ export default function SignUp() {
           Create your account
         </h1>
 
+        {/* ✅ FIXED MESSAGE UI */}
+        {error && (
+          <div className="bg-red-500/10 border border-red-500 text-red-400 px-4 py-2 rounded-lg text-sm mb-4 text-center">
+            {error}
+          </div>
+        )}
+
+        {success && (
+          <div className="bg-green-500/10 border border-green-500 text-green-400 px-4 py-2 rounded-lg text-sm mb-4 text-center">
+            {success}
+          </div>
+        )}
+
         {/* Form */}
         <form onSubmit={submitHandler} className="flex flex-col gap-4">
 
-          {/* Username */}
           <div>
             <label className="block text-sm mb-1 text-zinc-400">
               Full Name
@@ -100,12 +95,11 @@ export default function SignUp() {
               type="text"
               name="fullName"
               onChange={onchangeHandler}
-              placeholder="Chadan singh kornga"
+              placeholder="Chandan Singh Koranga"
               className="w-full bg-zinc-800 border border-zinc-700 rounded-lg px-3 py-2 text-sm outline-none focus:border-emerald-500 transition"
             />
           </div>
 
-          {/* Email */}
           <div>
             <label className="block text-sm mb-1 text-zinc-400">
               Email
@@ -119,7 +113,6 @@ export default function SignUp() {
             />
           </div>
 
-          {/* Password */}
           <div>
             <label className="block text-sm mb-1 text-zinc-400">
               Password
@@ -133,26 +126,25 @@ export default function SignUp() {
             />
           </div>
 
-          {/* Confirm Password */}
           <div>
             <label className="block text-sm mb-1 text-zinc-400">
               Confirm Password
             </label>
             <input
               type="password"
-              placeholder="••••••••"
-              onChange={onchangeHandler}
               name="Confirmpassword"
+              onChange={onchangeHandler}
+              placeholder="••••••••"
               className="w-full bg-zinc-800 border border-zinc-700 rounded-lg px-3 py-2 text-sm outline-none focus:border-emerald-500 transition"
             />
           </div>
 
-          {/* Signup Button */}
           <button
             type="submit"
+            disabled={loading} // ✅ disable
             className="bg-emerald-500 hover:bg-emerald-400 text-zinc-900 font-semibold py-2 rounded-lg transition"
           >
-            Sign Up
+            {loading ? "Creating..." : "Sign Up"} {/* ✅ dynamic text */}
           </button>
 
         </form>
@@ -167,7 +159,10 @@ export default function SignUp() {
         {/* Login Redirect */}
         <p className="text-center text-sm text-zinc-400">
           Already have an account?{" "}
-          <button onClick={() => { navigate("/login") }} className="text-emerald-400 hover:text-emerald-300">
+          <button
+            onClick={() => { navigate("/login") }}
+            className="text-emerald-400 hover:text-emerald-300"
+          >
             Login
           </button>
         </p>

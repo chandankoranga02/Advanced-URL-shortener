@@ -12,7 +12,19 @@ export default function HP_hero({ User_name, status }) {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [qrCode, setQrCode] = useState("");
-  const [showQR, setShowQR] =  useState(false)
+  const [showQR, setShowQR] = useState(false)
+
+
+  // For Guest user who is not logged in 
+
+  const handleProtectedAction = () => {
+    if (!status) {
+      window.location.href = "/login";
+      return false;
+    }
+    return true;
+  };
+
 
   const Shortener_handler = async () => {
 
@@ -22,7 +34,6 @@ export default function HP_hero({ User_name, status }) {
 
     setError("")
     setLoading(true);
-
 
     const response = await fetch("http://localhost:5000/api/shortern",
       {
@@ -46,6 +57,7 @@ export default function HP_hero({ User_name, status }) {
     setLoading(false)
     setQrCode(data.qrcode);
     setShowQR(false)
+
   };
 
 
@@ -58,17 +70,34 @@ export default function HP_hero({ User_name, status }) {
 
 
 
-  let FirstName = User_name.fullName.trim().split(" ")[0];
-  FirstName = FirstName.charAt(0).toUpperCase() + FirstName.slice(1).toLowerCase();
-
-
+let FirstName = User_name?.fullName?.trim().split(" ")[0] || "Guest";
+FirstName = FirstName.charAt(0).toUpperCase() + FirstName.slice(1).toLowerCase();
+    
 
 
   return (
     <div className="min-h-screen bg-zinc-950 text-zinc-100 flex flex-col items-center justify-center px-4">
 
+
+      {loading && (
+        <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50">
+
+          <div className="flex flex-col items-center gap-4">
+
+            {/* Spinner */}
+            <div className="w-12 h-12 border-4 border-blue-500 border-t-transparent rounded-full animate-spin"></div>
+
+            {/* Text */}
+            <p className="text-white text-sm">Processing...</p>
+
+          </div>
+
+        </div>
+      )}
+
       {/* Content Wrapper */}
       <div className="w-full max-w-5xl flex flex-col gap-10 justify-center">
+
 
         {/* Heading */}
         <div className="text-center mb-12">
@@ -97,11 +126,16 @@ export default function HP_hero({ User_name, status }) {
               type="text"
               placeholder='Enter your url here'
               value={urlState}
+              onFocus={() => {
+                if (!status) {
+                  window.location.href = "/login";
+                }
+              }}
               onChange={(event) => setURLstate(event.target.value)}
               className="flex-1 bg-zinc-800 border border-zinc-700 rounded-xl px-5 py-4 text-base outline-none focus:border-blue-500 transition"
             />
 
-            <button onClick={Shortener_handler} className="bg-blue-600 hover:bg-blue-500 text-white font-semibold px-8 py-4 rounded-xl transition">
+            <button onClick={ ()=> {if (!handleProtectedAction()) return;  Shortener_handler(); }} className="bg-blue-600 hover:bg-blue-500 text-white font-semibold px-8 py-4 rounded-xl transition">
               Shorten
             </button>
           </div>
@@ -117,6 +151,11 @@ export default function HP_hero({ User_name, status }) {
               <input
                 type="text"
                 placeholder="Optional"
+                onFocus={() => {
+                  if (!status) {
+                    window.location.href = "/login";
+                  }
+                }}
                 onChange={(event) => setPassword(event.target.value)}
                 value={Password}
                 className="w-full bg-zinc-800 border border-zinc-700 rounded-lg px-4 py-3 outline-none focus:border-blue-500"
@@ -131,6 +170,11 @@ export default function HP_hero({ User_name, status }) {
               <input
                 type="date"
                 value={expiry}
+                onFocus={() => {
+                  if (!status) {
+                    window.location.href = "/login";
+                  }
+                }}
                 onChange={(event) => setExpiry(event.target.value)}
                 className="w-full bg-zinc-800 border border-zinc-700 rounded-lg px-4 py-3 outline-none focus:border-blue-500"
               />
@@ -141,7 +185,7 @@ export default function HP_hero({ User_name, status }) {
               <label className="text-sm text-zinc-400 mb-2">
                 QR Code
               </label>
-              <button onClick={ ()=> {setShowQR(true)} } className="bg-zinc-800 hover:bg-zinc-700 border border-zinc-700 rounded-lg py-3 transition">
+              <button onClick={() => { setShowQR(true) }} className="bg-zinc-800 hover:bg-zinc-700 border border-zinc-700 rounded-lg py-3 transition">
                 Generate QR
               </button>
             </div>

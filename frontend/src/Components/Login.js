@@ -6,7 +6,7 @@ export default function Login() {
   const navigate = useNavigate();
   const [error, seterror] = useState("");
   const [success, setsuccess] = useState("");
-  
+  const [loading, setLoading] = useState(false); 
 
   const [Logindata, setLogindata] = useState({
     email: "",
@@ -23,63 +23,46 @@ export default function Login() {
 
   const SubmitHandler = async (e) => {
     e.preventDefault()
-     seterror("")
+    seterror("")
+    setLoading(true) // ✅ start loading
 
     const response = await fetch(API_key, {
       method: "POST",
       headers: {
         "Content-Type": "application/json"
       },
-      credentials : "include",
+      credentials: "include",
       body: JSON.stringify(Logindata)
     })
 
     const data = await response.json()
 
-
-    if(!response.ok){
+    if (!response.ok) {
       seterror(data.msg)
+      setLoading(false) // ✅ stop loading
     }
-    else{
+    else {
       setsuccess(data.msg)
-      
-      setTimeout (()=> {
+
+      setTimeout(() => {
         navigate("/");
       }, 2000)
-
     }
-
   }
-
 
   return (
 
     <div className="min-h-screen bg-zinc-950 text-zinc-100 flex items-center justify-center">
 
-      {error && (
-        <div style={{
-          backgroundColor: "#fee2e2",
-          color: "#b91c1c",
-          padding: "10px",
-          marginBottom: "10px",
-          borderRadius: "5px"
-        }}>
-          {error}
+      {/* 🔥 LOADING OVERLAY */}
+      {loading && (
+        <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50">
+          <div className="flex flex-col items-center gap-4">
+            <div className="w-12 h-12 border-4 border-emerald-500 border-t-transparent rounded-full animate-spin"></div>
+            <p className="text-white text-sm">Logging in...</p>
+          </div>
         </div>
       )}
-
-      {success && (
-        <div style={{
-          backgroundColor: "#dcfce7",
-          color: "#166534",
-          padding: "10px",
-          marginBottom: "10px",
-          borderRadius: "5px"
-        }}>
-          {success}
-        </div>
-      )}
-
 
       {/* Container */}
       <div className="w-full max-w-md bg-zinc-900 border border-zinc-800 rounded-2xl p-8 shadow-lg">
@@ -88,6 +71,18 @@ export default function Login() {
         <h1 className="text-2xl font-semibold mb-6 text-center">
           Login to your account
         </h1>
+
+        {error && (
+          <div className="bg-red-500/10 border border-red-500 text-red-400 px-4 py-2 rounded-lg text-sm mb-4 text-center">
+            {error}
+          </div>
+        )}
+
+        {success && (
+          <div className="bg-green-500/10 border border-green-500 text-green-400 px-4 py-2 rounded-lg text-sm mb-4 text-center">
+            {success}
+          </div>
+        )}
 
         {/* Form */}
         <form onSubmit={SubmitHandler} className="flex flex-col gap-4">
@@ -133,10 +128,10 @@ export default function Login() {
           {/* Login Button */}
           <button
             type="submit"
+            disabled={loading} // ✅ disable while loading
             className="bg-emerald-500 hover:bg-emerald-400 text-zinc-900 font-semibold py-2 rounded-lg transition"
-
           >
-            Login
+            {loading ? "Logging in..." : "Login"} {/* ✅ dynamic text */}
           </button>
 
         </form>
