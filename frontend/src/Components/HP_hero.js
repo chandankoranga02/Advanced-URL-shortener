@@ -2,7 +2,7 @@ import React, { use } from 'react'
 import { useState } from 'react';
 
 
-export default function HP_hero({User_name , status}) {
+export default function HP_hero({ User_name, status }) {
 
 
   const [urlState, setURLstate] = useState("");
@@ -11,6 +11,8 @@ export default function HP_hero({User_name , status}) {
   const [expiry, setExpiry] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+  const [qrCode, setQrCode] = useState("");
+  const [showQR, setShowQR] =  useState(false)
 
   const Shortener_handler = async () => {
 
@@ -42,9 +44,11 @@ export default function HP_hero({User_name , status}) {
 
     SetshortURL(data.ShortURL);
     setLoading(false)
-
-
+    setQrCode(data.qrcode);
+    setShowQR(false)
   };
+
+
 
   const Copy_handler = async () => {
     const copyURL = shortURL;
@@ -52,8 +56,13 @@ export default function HP_hero({User_name , status}) {
     alert("Copied to clipboard!");
   }
 
-let FirstName = User_name.fullName.trim().split(" ")[0];
-FirstName = FirstName.charAt(0).toUpperCase() + FirstName.slice(1).toLowerCase();
+
+
+  let FirstName = User_name.fullName.trim().split(" ")[0];
+  FirstName = FirstName.charAt(0).toUpperCase() + FirstName.slice(1).toLowerCase();
+
+
+
 
   return (
     <div className="min-h-screen bg-zinc-950 text-zinc-100 flex flex-col items-center justify-center px-4">
@@ -65,7 +74,7 @@ FirstName = FirstName.charAt(0).toUpperCase() + FirstName.slice(1).toLowerCase()
         <div className="text-center mb-12">
 
 
-        {status ? (<h1 className="text-5xl md:text-6xl font-semibold mb-5">
+          {status ? (<h1 className="text-5xl md:text-6xl font-semibold mb-5">
             Hi , <span className="text-blue-500">{FirstName}</span>
           </h1>) : (null)}
 
@@ -132,7 +141,7 @@ FirstName = FirstName.charAt(0).toUpperCase() + FirstName.slice(1).toLowerCase()
               <label className="text-sm text-zinc-400 mb-2">
                 QR Code
               </label>
-              <button className="bg-zinc-800 hover:bg-zinc-700 border border-zinc-700 rounded-lg py-3 transition">
+              <button onClick={ ()=> {setShowQR(true)} } className="bg-zinc-800 hover:bg-zinc-700 border border-zinc-700 rounded-lg py-3 transition">
                 Generate QR
               </button>
             </div>
@@ -163,6 +172,20 @@ FirstName = FirstName.charAt(0).toUpperCase() + FirstName.slice(1).toLowerCase()
           </div>
 
         </div>
+
+        {qrCode && showQR && (
+          <div className="mt-6 flex flex-col items-center gap-4">
+            <img src={qrCode} alt="QR Code" className="w-64 h-64" />
+
+            <a
+              href={qrCode}
+              download="qr-code.png"
+              className="bg-green-600 px-4 py-2 rounded-lg"
+            >
+              Download QR
+            </a>
+          </div>
+        )}
 
       </div>
     </div>
