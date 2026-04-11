@@ -9,11 +9,11 @@ exports.Redirect_window = async (req, res) => {
     const link = await Links_data.findOne({ randomId: Shortcode });
 
     if (!link) {
-        return res.status(404).json({ msg: "Link not found " })
+       return res.redirect("http://localhost:3000/error?type=notfound");
     }
 
     if (link.ExpiryDate && link.ExpiryDate < new Date()) {
-        return res.status(400).json({ msg: "Link expired" })
+       return res.redirect("http://localhost:3000/error?type=expired");
     }
 
 
