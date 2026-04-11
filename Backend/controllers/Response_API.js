@@ -2,6 +2,7 @@ const { nanoid } = require("nanoid");
 const bcrypt = require('bcrypt')
 const LinksData = require('../models/LinksData');
 const mongoose =  require('mongoose')
+const QRCode =  require('qrcode')
 
 
 
@@ -26,8 +27,6 @@ exports.Response_POST_API = async (req, res) => {
     }
 
     const hashedPassword = Password ?  await bcrypt.hash(Password, 10) : null;
-  //   const userId = "67f123abc456def789"; temporary user id fro te
-
 
 
     const newLInks = await LinksData.create({
@@ -41,10 +40,11 @@ exports.Response_POST_API = async (req, res) => {
 
     newLInks.save() ;
 
-
+    const qrcode =  await QRCode.toDataURL(`http://localhost:5000/${Shortcode}`);
 
     res.status(201).json({
-        ShortURL: `http://localhost:5000/${Shortcode}`
+        ShortURL: `http://localhost:5000/${Shortcode}` ,
+        qrcode : qrcode 
     })
 
 }
