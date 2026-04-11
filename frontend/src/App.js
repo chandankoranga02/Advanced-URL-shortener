@@ -23,7 +23,7 @@ function App() {
      <Route path="/signup" element={<SignUp/>}/>
      <Route path="*" element={<Error_404/>}/>
      <Route path='/verify/:ShortCode' element={<Password_redirect/>}/>
-     <Route path='/verify/:ShortCode' element={<Redirect_error/>}/>
+     <Route path="/error" element={<Redirect_error />} />
     </Routes>
     
     

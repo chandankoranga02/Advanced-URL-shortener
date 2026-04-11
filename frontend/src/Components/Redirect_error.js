@@ -1,24 +1,41 @@
+import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import { useState } from 'react'
 
-export default function Redirect_error ({ type = "not_found" }) {
+
+export default function Redirect_error () {
   const navigate = useNavigate();
 
-  const errorConfig = {
-    expired: {
-      title: "Link Expired",
-      message: "This link is no longer valid. It may have expired.",
-    },
-    not_found: {
-      title: "Link Not Found",
-      message: "The link you are looking for does not exist.",
-    },
-    wrong_password: {
-      title: "Wrong Password",
-      message: "The password you entered is incorrect.",
-    },
-  };
+   const [title, settitle ]= useState("")
+   const [message, setmessage] = useState("")
 
-  const { title, message } = errorConfig[type];
+
+    useEffect(() => {
+
+      const fetchError =  () => {
+    const params = new URLSearchParams(window.location.search);
+    const type = params.get("type");
+
+        if(type === "notfound"){
+          settitle("Link Not Found")
+          setmessage(" The link you are trying to find , it not exist or changed or deleted ")
+        }
+
+          else if(type === "expired"){
+          settitle("Link Expired")
+          setmessage(" The link you are trying to reach has been Expired ")
+        }
+
+        else{
+          settitle("Server Error")
+          setmessage("Sorry, Server Failed to process your request ")
+        }
+
+      }
+
+      fetchError()
+
+    },[])
 
   return (
     <div className="min-h-screen bg-black flex items-center justify-center">
