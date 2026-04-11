@@ -1,20 +1,42 @@
 import React, { useState } from "react";
+import { useParams } from "react-router-dom";
 
-export default function Password_redirect() {
+
+
+export default function Password_redirect( ) {
   const [password, setPassword] = useState("");
   const [error, setError] = useState(false);
+  const {ShortCode} =  useParams();
+  
+  const API_password = `http://localhost:5000/verify/${ShortCode}`
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
+    
+    console.log("FORM SUBMITTED");
+    console.log(API_password);
+    console.log(password)
     e.preventDefault();
+    
+    const response = await fetch(API_password , {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({password})
+    })
+    
+    const data = await response.json()
 
-
-    if (password !== "1234") {
+    if (data.msg) {
       setError(true);
       return;
     }
 
-    setError(false);
-    window.location.href = "https://abc.com";
+    else {
+      setError(false);
+      window.location.href= data.redirectUrl;
+    }
+
   };
 
   return (
