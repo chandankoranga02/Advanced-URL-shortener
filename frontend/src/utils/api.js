@@ -11,5 +11,5 @@ export const endpoints = {
 
 // 🔹 Dynamic endpoints
 export const dynamicEndpoints = {
-  VERIFY: (ShortCode) => `${BASE_URL}/api/verify/${ShortCode}`,
+  VERIFY: (ShortCode) => `${BASE_URL}/verify/${ShortCode}`,
 };
