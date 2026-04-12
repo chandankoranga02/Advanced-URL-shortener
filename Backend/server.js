@@ -26,6 +26,6 @@ app.use('/api/shortern/', API_shortner)
 app.use('/', Redirect_route)
 app.use('/api/', Logged_user)
 
-const PORT = 5000;
+
 database();
-app.listen(PORT , ()=> { console.log("server is running at PORT 5000")})
+app.listen(process.env.PORT || 5000)
