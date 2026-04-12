@@ -47,7 +47,7 @@ export default function HP_nav({ status }) {
               About AppNest
             </a>
 
-            <a href="wwww.chandankoranga.in" className="text-zinc-400 text-sm hover:text-white transition-colors">
+            <a href="https://www.chandankoranga.in" target="_blank"  className="text-zinc-400 text-sm hover:text-white transition-colors">
               About Developer
             </a>
 

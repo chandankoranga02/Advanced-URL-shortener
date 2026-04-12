@@ -34,6 +34,7 @@ export default function HP_hero({ User_name, status }) {
       const response = await fetch(endpoints.SHORTEN, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
+        credentials: "include", // TO use middlware , it is important to add 
         body: JSON.stringify({
           originalURL: urlState,
           Password: Password,

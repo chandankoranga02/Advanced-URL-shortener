@@ -5,8 +5,8 @@ export const endpoints = {
   ME: `${BASE_URL}/api/me`,
   SHORTEN: `${BASE_URL}/api/shortern`,
   LOGOUT: `${BASE_URL}/api/logout`,
-  LOGIN: `${BASE_URL}/api/login`,
-  SIGNUP: `${BASE_URL}/api/signup`,
+  LOGIN: `${BASE_URL}/login`,
+  SIGNUP: `${BASE_URL}/signup`,
 };
 
 // 🔹 Dynamic endpoints
