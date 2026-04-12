@@ -7,7 +7,7 @@ import Login from './Components/Login';
 import { Routes, Route } from "react-router-dom";
 import Redirect_error from './Components/Redirect_error'
 import Password_redirect from './Components/Password_redirect'
-
+import Contact from './Components/contact'
 
 function App() {
   
@@ -17,7 +17,7 @@ function App() {
 
     <Routes>
 
-  
+     <Route path="/contact" element={<Contact/>} />
      <Route path="/" element={<HomePage/>}/>
      <Route path="/login" element={<Login/>}/>
      <Route path="/signup" element={<SignUp/>}/>

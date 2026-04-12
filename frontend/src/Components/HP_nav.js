@@ -1,4 +1,4 @@
-import React from 'react'
+import { endpoints} from '../utils/api';
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 
@@ -10,7 +10,7 @@ export default function HP_nav({ status }) {
   const logoutHandler = async () => {
     setLoading(true);
 
-    await fetch("http://localhost:5000/api/logout", {
+    await fetch(endpoints.LOGOUT, {
       method: "POST",
       headers: {
         "Content-Type": "application/json"
@@ -18,7 +18,7 @@ export default function HP_nav({ status }) {
       credentials: "include",
     });
 
-    // 👇 HARD REFRESH (IMPORTANT)
+    //  HARD REFRESH 
     window.location.href = "/";
   }
 
@@ -44,10 +44,14 @@ export default function HP_nav({ status }) {
           <div className="flex flex-wrap items-center justify-center md:justify-end gap-4 md:gap-8 text-center">
 
             <a href="#" className="text-zinc-400 text-sm hover:text-white transition-colors">
-              About us
+              About AppNest
             </a>
 
-            <a href="#" className="text-zinc-400 text-sm hover:text-white transition-colors">
+            <a href="wwww.chandankoranga.in" className="text-zinc-400 text-sm hover:text-white transition-colors">
+              About Developer
+            </a>
+
+            <a href="/contact" className="text-zinc-400 text-sm hover:text-white transition-colors">
               Contact us
             </a>
 

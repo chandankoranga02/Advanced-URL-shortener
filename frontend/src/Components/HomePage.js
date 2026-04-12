@@ -1,48 +1,72 @@
-
 import HP_nav from './HP_nav'
 import HP_hero from './HP_hero'
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { Helmet } from "react-helmet";
+import { endpoints} from '../utils/api';
 
 
 export default function HomePage() {
+
   const [user, setUser] = useState(null)
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const navigate = useNavigate();
 
-
-  let isloggedIN = false;
   useEffect(() => {
-
     const authCheck = async () => {
-      const response = await fetch("http://localhost:5000/api/me", {
-        credentials: "include"
-      })
+      try {
+        const response = await fetch(endpoints.ME, {  // endpoints.ME ka API env and api.js main store hai
+          credentials: "include"
+        });
 
-      if (!response.ok) {
-        setIsLoggedIn(false)
-        return;
-        
+        if (!response.ok) {
+          setIsLoggedIn(false);
+          return;
+        }
+
+        const data = await response.json();
+        setUser(data);
+        setIsLoggedIn(true);
+
+      } catch (err) {
+        setIsLoggedIn(false);
       }
-
-      const data = await response.json();
-      setUser(data);
-      setIsLoggedIn(true);
-    }
+    };
 
     authCheck();
-
   }, []);
-
-
 
   return (
     <>
+      <Helmet>
+        <title>App Nests - URL Shortener</title>
 
-      <HP_nav  status={isLoggedIn} />
-      <HP_hero User_name={user}  status={isLoggedIn} />
+        <meta
+          name="description"
+  content="URL shortener, link shortener app, free URL shortener, secure link shortener, password protected links, link expiry tool, QR code generator online, custom short links, link management tool, URL analytics, modern URL shortener, App Nests, app ecosystem platform, smart link sharing, shorten links online" 
+        />
+
+        <meta
+          name="keywords"
+          content="URL shortener, link shortener, QR code generator, secure links, App Nests"
+        />
+
+        <meta name="author" content="Chandan Koranga" />
+
+        <meta property="og:title" content="App Nests - Smart URL Shortener" />
+        <meta
+          property="og:description"
+          content="Shorten, secure, and manage your links with App Nests."
+        />
+        <meta property="og:type" content="website" />
+        <meta property="og:url" content="https://chandankoranga.in" />
+      </Helmet>
+
+       {/* UI module Below */}
 
 
+      <HP_nav status={isLoggedIn} />
+      <HP_hero User_name={user} status={isLoggedIn} />
     </>
-  )
+  );
 }

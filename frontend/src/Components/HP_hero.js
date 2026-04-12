@@ -1,9 +1,8 @@
-import React, { use } from 'react'
+import React from 'react'
 import { useState } from 'react';
-
+import { endpoints} from '../utils/api';
 
 export default function HP_hero({ User_name, status }) {
-
 
   const [urlState, setURLstate] = useState("");
   const [Password, setPassword] = useState("");
@@ -14,9 +13,6 @@ export default function HP_hero({ User_name, status }) {
   const [qrCode, setQrCode] = useState("");
   const [showQR, setShowQR] = useState(false)
 
-
-  // For Guest user who is not logged in 
-
   const handleProtectedAction = () => {
     if (!status) {
       window.location.href = "/login";
@@ -25,19 +21,19 @@ export default function HP_hero({ User_name, status }) {
     return true;
   };
 
-
   const Shortener_handler = async () => {
 
     if (!urlState) {
       return setError("URL is required");
     }
 
-    setError("")
+    setError("");
     setLoading(true);
 
-    const response = await fetch("http://localhost:5000/api/shortern",
-      {
-        method: "POST", headers: { "Content-Type": "application/json" },
+    try {
+      const response = await fetch(endpoints.SHORTEN, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           originalURL: urlState,
           Password: Password,
@@ -45,147 +41,128 @@ export default function HP_hero({ User_name, status }) {
         }),
       });
 
+      let data;
+      try {
+        data = await response.json();
+      } catch {
+        throw new Error("Invalid server response");
+      }
 
+      if (!response.ok) {
+        throw new Error(data.message || "Failed");
+      }
 
-    const data = await response.json();
+      SetshortURL(data.ShortURL);
+      setQrCode(data.qrcode);
+      setShowQR(false);
 
-    if (!response.ok) {
-      throw new Error(data.message || "Failed");
+    } catch (err) {
+      if (err.name === "TypeError") {
+        setError("Server is down or network issue.");
+      } else {
+        setError(err.message);
+      }
+    } finally {
+      setLoading(false);
     }
-
-    SetshortURL(data.ShortURL);
-    setLoading(false)
-    setQrCode(data.qrcode);
-    setShowQR(false)
-
   };
 
-
-
   const Copy_handler = async () => {
-    const copyURL = shortURL;
-    await navigator.clipboard.writeText(copyURL);
+    await navigator.clipboard.writeText(shortURL);
     alert("Copied to clipboard!");
   }
 
-
-
-let FirstName = User_name?.fullName?.trim().split(" ")[0] || "Guest";
-FirstName = FirstName.charAt(0).toUpperCase() + FirstName.slice(1).toLowerCase();
-    
-
+  let FirstName = User_name?.fullName?.trim().split(" ")[0] || "Guest";
+  FirstName = FirstName.charAt(0).toUpperCase() + FirstName.slice(1).toLowerCase();
 
   return (
-    <div className="min-h-screen bg-zinc-950 text-zinc-100 flex flex-col items-center justify-center px-4">
-
+    <div className="min-h-screen bg-zinc-950 text-zinc-100 flex flex-col items-stretch px-3 sm:px-4 pt-8 sm:pt-12 md:pt-16">
 
       {loading && (
         <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50">
-
           <div className="flex flex-col items-center gap-4">
-
-            {/* Spinner */}
-            <div className="w-12 h-12 border-4 border-blue-500 border-t-transparent rounded-full animate-spin"></div>
-
-            {/* Text */}
+            <div className="w-10 h-10 border-4 border-blue-500 border-t-transparent rounded-full animate-spin"></div>
             <p className="text-white text-sm">Processing...</p>
-
           </div>
-
         </div>
       )}
 
-      {/* Content Wrapper */}
-      <div className="w-full max-w-5xl flex flex-col gap-10 justify-center">
+      <div className="w-full max-w-5xl mx-auto flex flex-col gap-6 sm:gap-10">
 
+        {/* 🔥 FIXED SPACING HERE */}
+        <div className="text-center mt-6 sm:mt-10 md:mt-12 mb-8 sm:mb-12">
 
-        {/* Heading */}
-        <div className="text-center mb-12">
+          {error && (
+            <div className="mb-4 text-red-500 text-sm">
+              {error}
+            </div>
+          )}
 
+          {status && (
+            <h1 className="text-3xl sm:text-4xl md:text-6xl font-semibold mb-4">
+              Hi, <span className="text-blue-500">{FirstName}</span>
+            </h1>
+          )}
 
-          {status ? (<h1 className="text-5xl md:text-6xl font-semibold mb-5">
-            Hi , <span className="text-blue-500">{FirstName}</span>
-          </h1>) : (null)}
-
-
-
-          <h1 className="text-5xl text-yellow-500 md:text-6xl font-semibold mb-4">
+          <h1 className="text-3xl sm:text-4xl md:text-6xl font-semibold mb-3 sm:mb-4 text-yellow-500">
             Shorten Your Links
           </h1>
-          <p className="text-zinc-400 text-base">
+
+          <p className="text-zinc-400 text-sm sm:text-base">
             Fast, secure and customizable URL shortening
           </p>
         </div>
 
-        {/* Main Card */}
-        <div className="bg-zinc-900/80 backdrop-blur border border-zinc-800 rounded-2xl p-8 md:p-10 shadow-2xl">
+        <div className="bg-zinc-900/80 border border-zinc-800 rounded-2xl p-5 sm:p-6 md:p-10 shadow-2xl">
 
-          {/* Input Section */}
-          <div className="flex flex-col md:flex-row gap-4 mb-8">
+          <div className="flex flex-col md:flex-row gap-3 sm:gap-4 mb-6 sm:mb-8">
+
             <input
               type="text"
-              placeholder='Enter your url here'
+              placeholder="Enter your url here"
               value={urlState}
-              onFocus={() => {
-                if (!status) {
-                  window.location.href = "/login";
-                }
-              }}
-              onChange={(event) => setURLstate(event.target.value)}
-              className="flex-1 bg-zinc-800 border border-zinc-700 rounded-xl px-5 py-4 text-base outline-none focus:border-blue-500 transition"
+              onChange={(e) => setURLstate(e.target.value)}
+              className="flex-1 bg-zinc-800 border border-zinc-700 rounded-xl px-4 py-3 text-sm sm:text-base outline-none focus:border-blue-500"
             />
 
-            <button onClick={ ()=> {if (!handleProtectedAction()) return;  Shortener_handler(); }} className="bg-blue-600 hover:bg-blue-500 text-white font-semibold px-8 py-4 rounded-xl transition">
+            <button
+              onClick={() => { if (!handleProtectedAction()) return; Shortener_handler(); }}
+              className="bg-blue-600 hover:bg-blue-500 text-white font-semibold px-5 sm:px-8 py-3 sm:py-4 rounded-xl text-sm sm:text-base"
+            >
               Shorten
             </button>
+
           </div>
 
-          {/* Options */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 sm:gap-6">
 
-            {/* Password */}
             <div>
-              <label className="text-sm text-zinc-400 mb-2 block">
-                Password
-              </label>
+              <label className="text-sm text-zinc-400 mb-2 block">Password</label>
               <input
                 type="text"
                 placeholder="Optional"
-                onFocus={() => {
-                  if (!status) {
-                    window.location.href = "/login";
-                  }
-                }}
-                onChange={(event) => setPassword(event.target.value)}
                 value={Password}
-                className="w-full bg-zinc-800 border border-zinc-700 rounded-lg px-4 py-3 outline-none focus:border-blue-500"
+                onChange={(e) => setPassword(e.target.value)}
+                className="w-full bg-zinc-800 border border-zinc-700 rounded-lg px-4 py-3 text-sm outline-none focus:border-blue-500"
               />
             </div>
 
-            {/* Expiry */}
             <div>
-              <label className="text-sm text-zinc-400 mb-2 block">
-                Expiry Date
-              </label>
+              <label className="text-sm text-zinc-400 mb-2 block">Expiry Date</label>
               <input
                 type="date"
                 value={expiry}
-                onFocus={() => {
-                  if (!status) {
-                    window.location.href = "/login";
-                  }
-                }}
-                onChange={(event) => setExpiry(event.target.value)}
-                className="w-full bg-zinc-800 border border-zinc-700 rounded-lg px-4 py-3 outline-none focus:border-blue-500"
+                onChange={(e) => setExpiry(e.target.value)}
+                className="w-full bg-zinc-800 border border-zinc-700 rounded-lg px-4 py-3 text-sm outline-none focus:border-blue-500"
               />
             </div>
 
-            {/* QR */}
             <div className="flex flex-col justify-end">
-              <label className="text-sm text-zinc-400 mb-2">
-                QR Code
-              </label>
-              <button onClick={() => { setShowQR(true) }} className="bg-zinc-800 hover:bg-zinc-700 border border-zinc-700 rounded-lg py-3 transition">
+              <label className="text-sm text-zinc-400 mb-2">QR Code</label>
+              <button
+                onClick={() => setShowQR(true)}
+                className="bg-zinc-800 hover:bg-zinc-700 border border-zinc-700 rounded-lg py-3 text-sm"
+              >
                 Generate QR
               </button>
             </div>
@@ -194,38 +171,34 @@ FirstName = FirstName.charAt(0).toUpperCase() + FirstName.slice(1).toLowerCase()
 
         </div>
 
-        {/* Output Section */}
-        <div className="mt-8 bg-zinc-900/80 border border-zinc-800 rounded-2xl p-6 shadow-xl">
+        <div className="mt-6 bg-zinc-900/80 border border-zinc-800 rounded-2xl p-5 sm:p-6 shadow-xl">
 
-          <p className="text-sm text-zinc-400 mb-3">
-            Shortened URL
-          </p>
+          <p className="text-sm text-zinc-400 mb-3">Shortened URL</p>
 
-          <div className="flex items-center gap-3">
+          <div className="flex flex-col sm:flex-row gap-3">
+
             <input
               type="text"
-              placeholder="https://short.ly/abc23"
               value={shortURL}
               readOnly
-              className="flex-1 bg-zinc-800 border border-zinc-700 rounded-lg px-4 py-3"
+              className="flex-1 bg-zinc-800 border border-zinc-700 rounded-lg px-4 py-3 text-sm"
             />
 
-            <button onClick={Copy_handler} className="bg-blue-600 hover:bg-blue-500 px-5 py-3 rounded-lg transition">
+            <button
+              onClick={Copy_handler}
+              className="bg-blue-600 hover:bg-blue-500 px-5 py-3 rounded-lg text-sm"
+            >
               Copy
             </button>
+
           </div>
 
         </div>
 
         {qrCode && showQR && (
           <div className="mt-6 flex flex-col items-center gap-4">
-            <img src={qrCode} alt="QR Code" className="w-64 h-64" />
-
-            <a
-              href={qrCode}
-              download="qr-code.png"
-              className="bg-green-600 px-4 py-2 rounded-lg"
-            >
+            <img src={qrCode} alt="QR Code" className="w-40 h-40 sm:w-64 sm:h-64" />
+            <a href={qrCode} download="qr-code.png" className="bg-green-600 px-4 py-2 rounded-lg text-sm">
               Download QR
             </a>
           </div>

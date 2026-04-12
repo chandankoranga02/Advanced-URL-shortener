@@ -1,6 +1,10 @@
 import React from 'react'
 import { useNavigate } from "react-router-dom";
 import { useState } from 'react';
+import { Helmet } from "react-helmet";
+import { endpoints} from '../utils/api';
+
+
 
 export default function SignUp() {
   const navigate = useNavigate();
@@ -22,14 +26,12 @@ export default function SignUp() {
     })
   }
 
-  const API_sighnup = "http://localhost:5000/signup";
-
   const submitHandler = async (e) => {
     e.preventDefault();
     setError("");
     setLoading(true); // ✅ start loading
 
-    const response = await fetch(API_sighnup, {
+    const response = await fetch(endpoints.SIGNUP, {
       method: "POST",
       headers: {
         "Content-Type": "application/json"
@@ -51,6 +53,31 @@ export default function SignUp() {
   }
 
   return (
+
+  <> 
+    <Helmet>
+  <title>Sign Up - App Nests</title>
+
+  <meta
+    name="description"
+    content="Create your App Nests account and start shortening links, generating QR codes, and building your app ecosystem."
+  />
+
+  <meta
+    name="keywords"
+    content="signup App Nests, create account, URL shortener signup, register"
+  />
+
+  <meta property="og:title" content="Sign Up - App Nests" />
+  <meta
+    property="og:description"
+    content="Join App Nests and start managing your links efficiently."
+  />
+</Helmet>
+
+
+
+
     <div className="min-h-screen bg-zinc-950 text-zinc-100 flex items-center justify-center">
 
       {/* 🔥 LOADING OVERLAY */}
@@ -169,5 +196,7 @@ export default function SignUp() {
 
       </div>
     </div>
+
+    </> 
   );
 }
