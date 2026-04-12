@@ -41,7 +41,7 @@ exports.Login_post = async (req, res) => {
 
     res.cookie("token", token, {
       httpOnly: true,
-      secure: false, // production me true
+      secure: true, // production me true
       sameSite: "lax"
     });
 

@@ -17,10 +17,10 @@ exports.signup_validation = [
 
     check('password')
     .trim()
-    // .matches(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&]).{8,}$/)
-    // .withMessage('Must include Capital , Special , Lowercase and Numbers ')
-    // .isLength({min : 8})
-    // .withMessage('Enter minimum length of 8')
+    .matches(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&]).{8,}$/)
+     .withMessage('Must include Capital , Special , Lowercase and Numbers ')
+    .isLength({min : 8})
+     .withMessage('Enter minimum length of 8')
 ,
 
     check('Confirmpassword')
