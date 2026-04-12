@@ -5,6 +5,9 @@ const jwt = require("jsonwebtoken");
 
 exports.Login_post = async (req, res) => {
   let { email, password } = req.body;
+
+      email = email.trim().toLowerCase();
+
   const Login_email = await Login.findOne({ email: email })
 
   if (!Login_email) { return res.status(400).json({ msg: " Invalid Credentials , please Enter correct email and password" }) }

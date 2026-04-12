@@ -29,8 +29,8 @@ exports.Response_POST_API = async (req, res) => {
     const hashedPassword = Password ?  await bcrypt.hash(Password, 10) : null;
 
 
-    const newLInks = await LinksData.create({
-        usedBy: new mongoose.Types.ObjectId("507f1f77bcf86cd799439011"),
+     await LinksData.create({
+        usedBy: req.user._id,
         originalLink: originalURL,
         randomId: Shortcode,
         password:  hashedPassword,
@@ -38,7 +38,6 @@ exports.Response_POST_API = async (req, res) => {
         status: "ACTIVE"
     })
 
-    newLInks.save() ;
 
     const qrcode =  await QRCode.toDataURL(`http://localhost:5000/${Shortcode}`);
 

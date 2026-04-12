@@ -4,8 +4,11 @@ const FormData = require('../models/FormData');
 
 
 exports.verifyToken = async (req, res, next) => {
-    const Token = req.cookies.token;
 
+  try{  
+
+    const Token = req.cookies.token;
+    
     if (!Token) {
         return res.status(401).json({ msg: "User not logged in" })
     }
@@ -19,5 +22,12 @@ exports.verifyToken = async (req, res, next) => {
     }
 
     req.user = user;
+
     next();
+
+    } catch (err) {
+    return res.status(401).json({ msg: "Invalid or expired token" });
+    
 }
+
+} 
