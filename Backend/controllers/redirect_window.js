@@ -20,8 +20,10 @@ exports.Redirect_window = async (req, res) => {
         return res.redirect(`${BASE_URL}/verify/${Shortcode}`);
     }
 
-    link.clicks += 1;
-    await link.save();
+    await Links_data.updateOne(
+        { randomId: Shortcode },
+        { $inc: { clicks: 1 } }
+    );
 
     await ClicksLogs.create({
         randomID: Shortcode,
