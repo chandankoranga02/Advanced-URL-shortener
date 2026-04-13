@@ -20,6 +20,13 @@ app.use(express.json());
 app.use(cors({ origin : process.env.CLIENT_URL , credentials : true }));
 app.use(cookieParser());
 
+
+// For uptime monitor
+app.get("/health", (req, res) => {
+  res.status(200).json({ status: "ok" });
+});
+
+
 app.use('/login', Login_route)
 app.use('/signup', SignUp_route)
 app.use('/api/shortern/', API_shortner)
@@ -27,10 +34,7 @@ app.use('/', Redirect_route)
 app.use('/api/', Logged_user)
 
 
-// For uptime monitor
-app.get("/health", (req, res) => {
-  res.status(200).json({ status: "ok" });
-});
+
 
 
 database();
