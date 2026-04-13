@@ -1,9 +1,13 @@
-import  { useState } from "react";
+import { useState, useEffect } from "react";
 import emailjs from "@emailjs/browser";
 import { Helmet } from "react-helmet";
 
 
 export default function Contact() {
+
+  useEffect(() => {
+    emailjs.init("UtIIgyx9joJ6rFbwM"); // ✅ public key init
+  }, []);
 
   const [formData, setFormData] = useState({
     name: "",
@@ -38,14 +42,19 @@ export default function Contact() {
       await emailjs.send(
         "service_d11juuj",
         "template_6z1bmm4",
-        formData,
-        "UtIIgyx9joJ6rFbwM"
+        {
+          name: formData.name,
+          email: formData.email,
+          phone: formData.phone,
+          message: formData.message
+        }
       );
 
       setSuccess("Message sent successfully!");
       setFormData({ name: "", email: "", phone: "", message: "" });
 
     } catch (err) {
+      console.log("ERROR:", err); // 🔥 debugging
       setError("Failed to send message");
     } finally {
       setLoading(false);
