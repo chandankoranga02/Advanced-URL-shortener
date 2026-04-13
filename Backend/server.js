@@ -27,5 +27,11 @@ app.use('/', Redirect_route)
 app.use('/api/', Logged_user)
 
 
+// For uptime monitor
+app.get("/health", (req, res) => {
+  res.status(200).json({ status: "ok" });
+});
+
+
 database();
 app.listen(process.env.PORT || 5000)
