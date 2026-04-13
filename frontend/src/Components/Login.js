@@ -148,16 +148,6 @@ export default function Login() {
               />
             </div>
 
-            {/* Forgot Password */}
-            <div className="text-right">
-              <button
-                type="button"
-                className="text-sm text-emerald-400 hover:text-emerald-300 transition"
-              >
-                Forgot password?
-              </button>
-            </div>
-
             {/* Login Button */}
             <button
               type="submit"
