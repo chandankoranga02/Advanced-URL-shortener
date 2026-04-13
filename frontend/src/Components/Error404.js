@@ -1,9 +1,9 @@
-import React from 'react'
+
 import { Helmet } from "react-helmet";
 
 
 
-export default function Error_404() {
+export default function Error404() {
 
 
   return (

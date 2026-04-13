@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { useState } from 'react'
 import { Helmet } from "react-helmet";
 
-export default function Redirect_error() {
+export default function Redirecterror() {
   const navigate = useNavigate();
 
   const [title, settitle] = useState("")

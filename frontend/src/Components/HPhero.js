@@ -2,7 +2,7 @@ import React from 'react'
 import { useState } from 'react';
 import { endpoints} from '../utils/api';
 
-export default function HP_hero({ User_name, status }) {
+export default function HPhero({ User_name, status }) {
 
   const [urlState, setURLstate] = useState("");
   const [Password, setPassword] = useState("");

@@ -4,7 +4,7 @@ import { Helmet } from "react-helmet";
 import { dynamicEndpoints } from "../utils/api";
 
 
-export default function Password_redirect() {
+export default function Passwordredirect() {
   const [password, setPassword] = useState("");
   const [error, setError] = useState(false);
   const { ShortCode } = useParams();

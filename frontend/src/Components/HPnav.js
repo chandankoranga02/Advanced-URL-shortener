@@ -2,7 +2,7 @@ import { endpoints} from '../utils/api';
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 
-export default function HP_nav({ status }) {
+export default function HPnav({ status }) {
 
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
@@ -43,11 +43,11 @@ export default function HP_nav({ status }) {
 
           <div className="flex flex-wrap items-center justify-center md:justify-end gap-4 md:gap-8 text-center">
 
-            <a href="#" className="text-zinc-400 text-sm hover:text-white transition-colors">
+            <a href="https://www.appnests.in" className="text-zinc-400 text-sm hover:text-white transition-colors">
               About AppNest
             </a>
 
-            <a href="https://www.chandankoranga.in" target="_blank"  className="text-zinc-400 text-sm hover:text-white transition-colors">
+            <a href="https://www.chandankoranga.in" target="_blank"  rel="noreferrer" className="text-zinc-400 text-sm hover:text-white transition-colors">
               About Developer
             </a>
 
@@ -55,7 +55,7 @@ export default function HP_nav({ status }) {
               Contact us
             </a>
 
-            <a href="#" className="text-zinc-400 text-sm hover:text-white transition-colors">
+            <a href="https://www.appnests.in/products" className="text-zinc-400 text-sm hover:text-white transition-colors">
               Explore Others
             </a>
 

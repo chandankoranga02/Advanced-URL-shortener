@@ -1,7 +1,6 @@
-import HP_nav from './HP_nav'
-import HP_hero from './HP_hero'
+import HPnav from './HPnav'
+import HPhero from './HPhero'
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
 import { Helmet } from "react-helmet";
 import { endpoints} from '../utils/api';
 
@@ -10,7 +9,7 @@ export default function HomePage() {
 
   const [user, setUser] = useState(null)
   const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const navigate = useNavigate();
+
 
   useEffect(() => {
     const authCheck = async () => {
@@ -65,8 +64,8 @@ export default function HomePage() {
        {/* UI module Below */}
 
 
-      <HP_nav status={isLoggedIn} />
-      <HP_hero User_name={user} status={isLoggedIn} />
+      <HPnav status={isLoggedIn} />
+      <HPhero User_name={user} status={isLoggedIn} />
     </>
   );
 }
