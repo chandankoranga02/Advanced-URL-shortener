@@ -36,10 +36,10 @@ export default function Contact() {
 
     try {
       await emailjs.send(
-        "YOUR_SERVICE_ID",
-        "YOUR_TEMPLATE_ID",
+        "service_d11juuj",
+        "template_6z1bmm4",
         formData,
-        "YOUR_PUBLIC_KEY"
+        "UtIIgyx9joJ6rFbwM"
       );
 
       setSuccess("Message sent successfully!");
