@@ -42,7 +42,7 @@ exports.Login_post = async (req, res) => {
     res.cookie("token", token, {
       httpOnly: true,
       secure: true, // production me true
-      sameSite: "lax"
+      sameSite: "none"
     });
 
     return res.status(200).json({ msg: "Login successful " })
