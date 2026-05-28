@@ -13,9 +13,18 @@ const formDataSchema = new mongoose.Schema({
         unique: true
     },
 
+    provider : {
+      type: String,
+      enum : ["google", "local"],
+      default : "local"
+    },
+
     password: {
         type: String,
-        required: true
+        required: ()=>{
+            return this.provider === "local";  // function will return either true or false
+        },
+        minlength: 6
     },
 
     ipaddres: {

@@ -14,6 +14,8 @@ const SignUp_route = require('./routes/SignUP_route')
 const API_shortner =  require('./routes/response')
 const Redirect_route = require('./routes/redirect_window')
 const Logged_user = require('./routes/Auth/User_route')
+const Google_oauth2 = require('./routes/Google_ouath_route')
+
 
 const app =  express()
 app.use(express.json());
@@ -32,6 +34,7 @@ app.use('/signup', SignUp_route)
 app.use('/api/shortern/', API_shortner)
 app.use('/', Redirect_route)
 app.use('/api/', Logged_user)
+app.use('/auth/google', Google_oauth2)
 
 
 

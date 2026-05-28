@@ -1,4 +1,4 @@
-const bcrypt = require('bcrypt')
+ const bcrypt = require('bcrypt')
 const login_logs = require('../models/Login_data')
 const Login = require('../models/FormData')
 const jwt = require("jsonwebtoken");
