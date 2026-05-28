@@ -1,10 +1,10 @@
-import React from 'react'
-import { useState } from 'react'
+import React from "react";
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Helmet } from "react-helmet";
-import { endpoints} from '../utils/api';
-
-
+import { endpoints } from "../utils/api";
+import { useGoogleLogin } from "@react-oauth/google";
+import { FcGoogle } from "react-icons/fc";
 
 export default function Login() {
   const navigate = useNavigate();
@@ -14,52 +14,89 @@ export default function Login() {
 
   const [Logindata, setLogindata] = useState({
     email: "",
-    password: ""
-  })
+    password: "",
+  });
 
   const onChaneHandler = (e) => {
     setLogindata({
-      ...Logindata, [e.target.name]: e.target.value
-    })
-  }
-
+      ...Logindata,
+      [e.target.name]: e.target.value,
+    });
+  };
 
   const SubmitHandler = async (e) => {
-    e.preventDefault()
-    seterror("")
-    setLoading(true) // ✅ start loading
+    e.preventDefault();
+    seterror("");
+    setLoading(true); // ✅ start loading
 
     const response = await fetch(endpoints.LOGIN, {
       method: "POST",
       headers: {
-        "Content-Type": "application/json"
+        "Content-Type": "application/json",
       },
       credentials: "include",
-      body: JSON.stringify(Logindata)
-    })
+      body: JSON.stringify(Logindata),
+    });
 
-    const data = await response.json()
+    const data = await response.json();
 
     if (!response.ok) {
-      seterror(data.msg)
-      setLoading(false) // ✅ stop loading
-    }
-    else {
-      setsuccess(data.msg)
+      seterror(data.msg);
+      setLoading(false); // ✅ stop loading
+    } else {
+      setsuccess(data.msg);
 
       setTimeout(() => {
         navigate("/");
-      }, 2000)
+      }, 2000);
     }
-  }
+  };
+
+  const success_response = async (AuthCode) => {
+    try {
+      setLoading(true);
+      const response = await fetch(endpoints.GOOGLE_LOGIN, {
+        method: "POST",
+
+        headers: {
+          "Content-Type": "application/json",
+        },
+        credentials: "include",
+        body: JSON.stringify({
+          code: AuthCode.code,
+        }),
+      });
+
+      const data = await response.json();
+
+      console.log(data);
+
+      if (!response.ok) {
+        seterror(data.msg);
+        setLoading(false); // ✅ stop loading
+      } else {
+        setsuccess(data.msg);
+
+        setTimeout(() => {
+          navigate("/");
+        }, 2000);
+
+      }
+    } catch (error) {
+      console.log("Internel server error ")
+    }
+  };
+
+  const error_response = () => {};
+
+  const Login_with_google = useGoogleLogin({
+    onSuccess: success_response,
+    onError: error_response,
+    flow: "auth-code",
+  });
 
   return (
     <>
-
-
-
-
-
       <Helmet>
         <title>Login - App Nests</title>
 
@@ -80,13 +117,7 @@ export default function Login() {
         />
       </Helmet>
 
-
-
-
-
-
       <div className="min-h-screen bg-zinc-950 text-zinc-100 flex items-center justify-center">
-
         {/* 🔥 LOADING OVERLAY */}
         {loading && (
           <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50">
@@ -99,7 +130,6 @@ export default function Login() {
 
         {/* Container */}
         <div className="w-full max-w-md bg-zinc-900 border border-zinc-800 rounded-2xl p-8 shadow-lg">
-
           {/* Heading */}
           <h1 className="text-2xl font-semibold mb-6 text-center">
             Login to your account
@@ -119,17 +149,14 @@ export default function Login() {
 
           {/* Form */}
           <form onSubmit={SubmitHandler} className="flex flex-col gap-4">
-
             {/* Email */}
             <div>
-              <label className="block text-sm mb-1 text-zinc-400">
-                Email
-              </label>
+              <label className="block text-sm mb-1 text-zinc-400">Email</label>
               <input
                 type="email"
                 placeholder="you@example.com"
                 onChange={onChaneHandler}
-                name='email'
+                name="email"
                 className="w-full bg-zinc-800 border border-zinc-700 rounded-lg px-3 py-2 text-sm outline-none focus:border-emerald-500 transition"
               />
             </div>
@@ -143,7 +170,7 @@ export default function Login() {
                 type="password"
                 placeholder="••••••••"
                 onChange={onChaneHandler}
-                name='password'
+                name="password"
                 className="w-full bg-zinc-800 border border-zinc-700 rounded-lg px-3 py-2 text-sm outline-none focus:border-emerald-500 transition"
               />
             </div>
@@ -156,7 +183,6 @@ export default function Login() {
             >
               {loading ? "Logging in..." : "Login"} {/* ✅ dynamic text */}
             </button>
-
           </form>
 
           {/* Divider */}
@@ -166,19 +192,47 @@ export default function Login() {
             <div className="flex-1 h-px bg-zinc-700"></div>
           </div>
 
+          {/* Google Login Button */}
+          <button
+            onClick={Login_with_google}
+            className="
+    w-full
+    flex
+    items-center
+    justify-center
+    gap-3
+    bg-white
+    text-black
+    py-2.5
+    rounded-lg
+    font-medium
+    hover:bg-zinc-200
+    transition
+  "
+          >
+            <FcGoogle className="text-xl" />
+            Continue with Google
+          </button>
+
+          {/* Divider */}
+          <div className="flex items-center gap-3 my-6">
+            <div className="flex-1 h-px bg-zinc-700"></div>
+
+            <div className="flex-1 h-px bg-zinc-700"></div>
+          </div>
+
           {/* Signup */}
           <p className="text-center text-sm text-zinc-400">
             Don’t have an account?{" "}
-            <button className="text-emerald-400 hover:text-emerald-300"
-              onClick={() => { window.location.href = "/signup" }}
+            <button
+              className="text-emerald-400 hover:text-emerald-300 transition"
+              onClick={() => navigate("/signup")}
             >
               Sign up
             </button>
           </p>
-
         </div>
       </div>
-
     </>
   );
 }

@@ -6,6 +6,7 @@ export const endpoints = {
   SHORTEN: `${BASE_URL}/api/shortern`,
   LOGOUT: `${BASE_URL}/api/logout`,
   LOGIN: `${BASE_URL}/login`,
+  GOOGLE_LOGIN: `${BASE_URL}/auth/google`,
   SIGNUP: `${BASE_URL}/signup`,
 };
 
