@@ -29,7 +29,7 @@ exports.Google_Login = async (req, res) => {
     res.cookie("token", token, {
       httpOnly: true,
       secure: true,
-      sameSite: "lax",
+      sameSite: "none",
     });
 
     const successfully_logedIn = new login_logs({
@@ -61,7 +61,7 @@ exports.Google_Login = async (req, res) => {
   res.cookie("token", token, {
     httpOnly: true,
     secure: true,
-    sameSite: "lax",
+    sameSite: "none",
   });
 
   return res.status(200).json({ msg: "Signup successful" });
